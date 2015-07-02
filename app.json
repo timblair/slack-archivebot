@@ -1,0 +1,27 @@
+{
+  "name": "slack-archivebot",
+  "description": "Automatically archive empty and inactive public channels.",
+  "repository": "https://github.com/timblair/slack-archivebot",
+  "logo": "https://babeljs.io/images/users/slack.svg",
+  "success_url": "/welcome",
+  "scripts": {
+    "postdeploy": "bundle exec rake bootstrap"
+  },
+  "env": {
+    "ARCHIVEBOT_SLACK_TOKEN": {
+      "description": "The Slack Web API key to use (must be a regular user account, not a bot)."
+    },
+    "ARCHIVEBOT_INACTIVITY_DAYS": {
+      "description": "The number of days' inactivity after which to archive a channel.",
+      "value": "30"
+    }
+  },
+  "addons": [
+    "scheduler:standard"
+  ],
+  "buildpacks": [
+    {
+      "url": "https://github.com/heroku/heroku-buildpack-go.git"
+    }
+  ]
+}
