@@ -71,7 +71,12 @@ type LastChannelMessage struct {
 }
 
 func inactiveChannels(api *slack.Slack) ([]slack.Channel, error) {
-	timeout := int64(time.Now().Unix()) - (86400 * 30)
+	inactiveDays, _ := strconv.ParseInt(os.Getenv("ARCHIVEBOT_INACTIVE_DAYS"), 10, 32)
+	if inactiveDays == 0 {
+		inactiveDays = 30
+	}
+
+	timeout := int64(time.Now().Unix()) - (86400 * inactiveDays)
 	channels := []slack.Channel{}
 
 	allChannels, err := api.GetChannels(true)
