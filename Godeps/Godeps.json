@@ -1,0 +1,14 @@
+{
+	"ImportPath": "github.com/timblair/slack-archivebot",
+	"GoVersion": "go1.4.2",
+	"Deps": [
+		{
+			"ImportPath": "github.com/nlopes/slack",
+			"Rev": "1da32686c2e7143de764729a1d52732047f7aa84"
+		},
+		{
+			"ImportPath": "golang.org/x/net/websocket",
+			"Rev": "d9558e5c97f85372afee28cf2b6059d7d3818919"
+		}
+	]
+}
