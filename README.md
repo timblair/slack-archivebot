@@ -43,3 +43,12 @@ The following environment variables are used to configure the script:
 Note: you must use an API key for a regular Slack user account.  You _cannot_
 use a bot user account, because bot users don't have permission to archive
 channels.
+
+## Licensing and Attribution
+
+slack-archivebot is released under the MIT license as detailed in the LICENSE
+file that should be distributed with this library; the source code is [freely
+available](http://github.com/timblair/slack-archivebot).
+
+slack-archivebot was developed by [Tim Blair](http://tim.bla.ir/) during a
+[Venntro](http://venntro.com/) hack day.
