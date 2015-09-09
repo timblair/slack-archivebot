@@ -2,12 +2,13 @@ package main
 
 import (
 	"fmt"
-	"github.com/nlopes/slack"
 	"log"
 	"os"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/nlopes/slack"
 )
 
 func main() {
@@ -104,19 +105,33 @@ func inactiveChannels(api *slack.Slack) ([]slack.Channel, error) {
 }
 
 func lastMessageTimestamp(api *slack.Slack, channel slack.Channel) (int64, error) {
-	historyParams := slack.HistoryParameters{Count: 1}
-	history, err := api.GetChannelHistory(channel.Id, historyParams)
+	var latest string
 
-	if err != nil {
-		return -1, err
+	for {
+		historyParams := slack.HistoryParameters{Count: 5}
+		if latest != "" {
+			historyParams.Latest = latest
+		}
+
+		history, err := api.GetChannelHistory(channel.Id, historyParams)
+
+		if err != nil {
+			return -1, err
+		}
+
+		if len(history.Messages) == 0 {
+			return -1, nil
+		}
+
+		for _, msg := range history.Messages {
+			latest = msg.Msg.Timestamp
+
+			if msg.SubType != "channel_join" && msg.SubType != "channel_leave" {
+				msgStamp := strings.Split(msg.Msg.Timestamp, ".")
+				if timestamp, err := strconv.ParseInt(msgStamp[0], 10, 32); err == nil {
+					return timestamp, nil
+				}
+			}
+		}
 	}
-
-	if len(history.Messages) == 0 {
-		return -1, nil
-	}
-
-	msgStamp := strings.Split(history.Messages[0].Msg.Timestamp, ".")
-	timestamp, _ := strconv.ParseInt(msgStamp[0], 10, 32)
-
-	return timestamp, nil
 }
