@@ -28,36 +28,53 @@ func main() {
 
 	go func(c []slack.Channel) {
 		defer wg.Done()
-		archiveEmpty(api, c)
+		archiveEmptyChannels(api, c)
 	}(channels)
 
 	go func(c []slack.Channel) {
 		defer wg.Done()
-		archiveInactive(api, c)
+		archiveInactiveChannels(api, c)
 	}(channels)
 
 	wg.Wait()
 }
 
-func archiveEmpty(api *slack.Slack, c []slack.Channel) {
-	for _, channel := range c {
-		if channel.NumMembers == 0 {
-			fmt.Printf("Archiving empty channel #%s (%s)\n", channel.Name, channel.Id)
-			if err := api.ArchiveChannel(channel.Id); err != nil {
-				log.Printf("Error archiving #%s (%s): %s\n", channel.Name, channel.Id, err)
-			}
-		}
-	}
+func archiveEmptyChannels(api *slack.Slack, c []slack.Channel) {
+	empty := filterEmptyChannels(api, c)
+	archiveChannels(api, empty, "emptiness")
 }
 
-func archiveInactive(api *slack.Slack, c []slack.Channel) {
-	inactive := inactiveChannels(api, c)
-	for _, channel := range inactive {
-		fmt.Printf("Archiving #%s (%s) due to inactivity\n", channel.Name, channel.Id)
-		if err := api.ArchiveChannel(channel.Id); err != nil {
-			log.Printf("Error archiving #%s (%s): %s\n", channel.Name, channel.Id, err)
+func archiveInactiveChannels(api *slack.Slack, c []slack.Channel) {
+	inactive := filterInactiveChannels(api, c)
+	archiveChannels(api, inactive, "inactivity")
+}
+
+func archiveChannels(api *slack.Slack, c []slack.Channel, reason string) {
+	var wg sync.WaitGroup
+
+	for _, channel := range c {
+		fmt.Printf("Archiving #%s (%s) due to %s\n", channel.Name, channel.Id, reason)
+		wg.Add(1)
+
+		go func(c slack.Channel) {
+			defer wg.Done()
+			if err := api.ArchiveChannel(c.Id); err != nil {
+				log.Printf("Error archiving #%s (%s): %s\n", c.Name, c.Id, err)
+			}
+		}(channel)
+	}
+
+	wg.Wait()
+}
+
+func filterEmptyChannels(api *slack.Slack, c []slack.Channel) []slack.Channel {
+	empty := []slack.Channel{}
+	for _, channel := range c {
+		if channel.NumMembers == 0 {
+			empty = append(empty, channel)
 		}
 	}
+	return empty
 }
 
 type LastChannelMessage struct {
@@ -65,7 +82,7 @@ type LastChannelMessage struct {
 	Timestamp int64
 }
 
-func inactiveChannels(api *slack.Slack, c []slack.Channel) []slack.Channel {
+func filterInactiveChannels(api *slack.Slack, c []slack.Channel) []slack.Channel {
 	inactiveDays, _ := strconv.ParseInt(os.Getenv("ARCHIVEBOT_INACTIVE_DAYS"), 10, 32)
 	if inactiveDays == 0 {
 		inactiveDays = 30
