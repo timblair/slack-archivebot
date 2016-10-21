@@ -14,7 +14,6 @@ import (
 
 func main() {
 	slackToken := os.Getenv("ARCHIVEBOT_SLACK_TOKEN")
-	onErrorNotify := os.Getenv("ARCHIVEBOT_NOTIFY")
 	api := slack.New(slackToken)
 	//api.SetDebug(true)
 
@@ -63,6 +62,7 @@ func archiveChannels(api *slack.Slack, c []slack.Channel, reason string) {
 				message := fmt.Sprintf("Error archiving channel #%s (%s): %s\n", c.Name, c.Id, err)
 				log.Printf(message)
 				// send error message in a DM to onErrorNotify user/channel
+				onErrorNotify := os.Getenv("ARCHIVEBOT_NOTIFY")
 				params := slack.PostMessageParameters{}
 				api.PostMessage(onErrorNotify, message, params)
 			}
