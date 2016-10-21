@@ -23,7 +23,7 @@ godep go build
 Heroku is the simplest option.  The script can run quite happily on a free dyno
 using the Heroku Scheduler add-on.
 
-[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
+[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/timblair/slack-archivebot)
 
 Note: the above will deploy the app to your Heroku account, and add the
 Scheduler add-on, but _won't_ configure it to run.  To do this, go to your
