@@ -4,9 +4,6 @@
   "repository": "https://github.com/timblair/slack-archivebot",
   "logo": "https://babeljs.io/images/users/slack.svg",
   "success_url": "/welcome",
-  "scripts": {
-    "postdeploy": "bundle exec rake bootstrap"
-  },
   "env": {
     "ARCHIVEBOT_SLACK_TOKEN": {
       "description": "The Slack Web API key to use (must be a regular user account, not a bot)."
