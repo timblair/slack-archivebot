@@ -59,7 +59,8 @@ func archiveChannels(api *slack.Slack, c []slack.Channel, reason string) {
 		go func(c slack.Channel) {
 			defer wg.Done()
 			if err := api.ArchiveChannel(c.Id); err != nil {
-				message := fmt.Sprintf("Error archiving channel #%s (%s): %s\n", c.Name, c.Id, err)
+				message := fmt.Sprintf(
+					"Error archiving channel #%s (%s): %s\n", c.Name, c.Id, err)
 				log.Printf(message)
 				// send error message in a DM to onErrorNotify user/channel
 				onErrorNotify := os.Getenv("ARCHIVEBOT_NOTIFY")
