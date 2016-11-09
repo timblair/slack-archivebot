@@ -39,7 +39,8 @@ The following environment variables are used to configure the script:
   for your team.
 * `ARCHIVEBOT_INACTIVITY_DAYS`: the number of days' inactivity after which to
   archive a channel (default: `30`).
-* `ARCHIVEBOT_NOTIFY`: a Slack user or channel (e.g. `#general` or `@tblair`) to notify when something goes wrong.
+* `ARCHIVEBOT_NOTIFY`: a Slack user or channel (e.g. `#general` or `@tblair`)
+  to notify when something goes wrong.
 
 Note: you must use an API key for a regular Slack user account.  You _cannot_
 use a bot user account, because bot users don't have permission to archive
