@@ -64,8 +64,10 @@ func archiveChannels(api *slack.Slack, c []slack.Channel, reason string) {
 				log.Printf(message)
 				// send error message in a DM to onErrorNotify user/channel
 				onErrorNotify := os.Getenv("ARCHIVEBOT_NOTIFY")
-				params := slack.PostMessageParameters{}
-				api.PostMessage(onErrorNotify, message, params)
+				if onErrorNotify != "" {
+					params := slack.PostMessageParameters{}
+					api.PostMessage(onErrorNotify, message, params)
+				}
 			}
 		}(channel)
 	}
