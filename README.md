@@ -23,7 +23,7 @@ godep go build
 Heroku is the simplest option.  The script can run quite happily on a free dyno
 using the Heroku Scheduler add-on.
 
-[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
+[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.svg)][herokudeploy]
 
 Note: the above will deploy the app to your Heroku account, and add the
 Scheduler add-on, but _won't_ configure it to run.  To do this, go to your
@@ -39,6 +39,8 @@ The following environment variables are used to configure the script:
   for your team.
 * `ARCHIVEBOT_INACTIVITY_DAYS`: the number of days' inactivity after which to
   archive a channel (default: `30`).
+* `ARCHIVEBOT_NOTIFY`: a Slack user or channel (e.g. `#general` or `@tblair`)
+  to notify when something goes wrong.
 
 Note: you must use an API key for a regular Slack user account.  You _cannot_
 use a bot user account, because bot users don't have permission to archive
@@ -52,3 +54,5 @@ available](http://github.com/timblair/slack-archivebot).
 
 slack-archivebot was developed by [Tim Blair](http://tim.bla.ir/) during a
 [Venntro](http://venntro.com/) hack day.
+
+[herokudeploy]: https://heroku.com/deploy?template=https://github.com/timblair/slack-archivebot

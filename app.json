@@ -11,6 +11,9 @@
     "ARCHIVEBOT_INACTIVITY_DAYS": {
       "description": "The number of days' inactivity after which to archive a channel.",
       "value": "30"
+    },
+    "ARCHIVEBOT_NOTIFY": {
+      "description": "A Slack user or channel (e.g. #general or @tblair) to notify when something goes wrong."
     }
   },
   "addons": [
